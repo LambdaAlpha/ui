@@ -3,20 +3,9 @@
 version = 3
 
 [[package]]
-name = "air_main"
-version = "0.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f76eff78edbaed042a83b463fb49c8986c383577951622a3d69c6e09419586f2"
-dependencies = [
- "airlang",
- "airlang_ext",
-]
-
-[[package]]
 name = "airagi"
 version = "0.0.1"
 dependencies = [
- "air_main",
  "airlang",
  "airlang_ext",
 ]

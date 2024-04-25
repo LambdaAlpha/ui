@@ -1,0 +1,6 @@
+[submodule "air/ext"]
+	path = air/ext
+	url = https://github.com/LambdaAlpha/air-main-ext
+[submodule "air/main"]
+	path = air/main
+	url = https://github.com/LambdaAlpha/air-main
