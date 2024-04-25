@@ -9,6 +9,9 @@ repository = "https://github.com/LambdaAlpha/airagi"
 keywords = ["air", "ai", "agi", "solver", "logic"]
 categories = ["science"]
 
+[[test]]
+name = "main"
+
 [lints]
 workspace = true
 

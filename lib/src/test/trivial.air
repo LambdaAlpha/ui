@@ -1,0 +1,7 @@
+; [a = not ? true, answer.into_input a]
+-----
+false
+=====
+; [a = not ? false, answer.into_input a]
+-----
+true
