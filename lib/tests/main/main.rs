@@ -27,8 +27,7 @@ pub(crate) fn import(path: &str) -> Val {
 pub(crate) fn testing_ctx() -> Ctx {
     let ctx = import("../tests/testing_ctx.air");
     let Val::Ctx(ctx) = ctx else { unreachable!() };
-    let ctx: Box<Ctx> = ctx.into();
-    *ctx
+    ctx.into()
 }
 
 #[test]
