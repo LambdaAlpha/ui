@@ -16,9 +16,8 @@ pub(crate) fn ext_ctx() -> Ctx {
     ctx
 }
 
-// PWD is lib/
 pub(crate) fn import(path: &str) -> Val {
-    let src = format!("build.import \"{path}\"");
+    let src = format!("build.import \"{}/{}\"", env!("CARGO_MANIFEST_DIR"), path);
     let Ok(val) = parse(&src) else { unreachable!() };
     let mut ctx = ext_ctx();
     interpret_mutable(MutableCtx::new(&mut ctx), val)
