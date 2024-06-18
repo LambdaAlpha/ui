@@ -6,6 +6,7 @@ use airlang::{
     parse,
     Ctx,
     MutableCtx,
+    Str,
     Val,
 };
 
@@ -17,14 +18,22 @@ pub(crate) fn ext_ctx() -> Ctx {
 }
 
 pub(crate) fn import(path: &str) -> Val {
-    let src = format!("build.import \"{}/{}\"", env!("CARGO_MANIFEST_DIR"), path);
-    let Ok(val) = parse(&src) else { unreachable!() };
+    let src = generate_import(path);
+    let val = parse(&src).expect("parse should never fail");
     let mut ctx = ext_ctx();
     interpret_mutable(MutableCtx::new(&mut ctx), val)
 }
 
+fn generate_import(path: &str) -> String {
+    let mut src = Str::from("build.import \"");
+    src.push_str_escaped(env!("CARGO_MANIFEST_DIR"));
+    src.push_str(path);
+    src.push('"');
+    src.into()
+}
+
 pub(crate) fn testing_ctx() -> Ctx {
-    let ctx = import("../tests/testing_ctx.air");
+    let ctx = import("/../tests/testing_ctx.air");
     let Val::Ctx(ctx) = ctx else { unreachable!() };
     ctx.into()
 }
