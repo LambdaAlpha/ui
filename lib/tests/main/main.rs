@@ -6,7 +6,7 @@ use airlang::{
     parse,
     Ctx,
     MutableCtx,
-    Str,
+    Text,
     Val,
 };
 
@@ -25,7 +25,7 @@ pub(crate) fn import(path: &str) -> Val {
 }
 
 fn generate_import(path: &str) -> String {
-    let mut src = Str::from("build.import \"");
+    let mut src = Text::from("build.import \"");
     src.push_str_escaped(env!("CARGO_MANIFEST_DIR"));
     src.push_str(path);
     src.push('"');
