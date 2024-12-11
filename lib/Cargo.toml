@@ -1,12 +1,12 @@
 [package]
-name = "airagi"
+name = "ui"
 version = "0.0.1"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 description = "The Air Artificial General Intelligence"
-homepage = "https://github.com/LambdaAlpha/airagi-doc"
-repository = "https://github.com/LambdaAlpha/airagi"
-keywords = ["air", "ai", "agi", "solver", "logic"]
+homepage = "https://github.com/LambdaAlpha/ui-doc"
+repository = "https://github.com/LambdaAlpha/ui"
+keywords = ["ai", "agi", "solver", "logic"]
 categories = ["science"]
 
 [[test]]

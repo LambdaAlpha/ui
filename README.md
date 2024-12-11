@@ -1,6 +1,6 @@
-# The Air Artificial General Intelligence
+# The Universal Intelligence
 
-The Air artificial general intelligence is an experimental AGI project. Its main goals are universality and optimality.
+The universal intelligence is an experimental project. Its main goals are universality and optimality.
 
 ## License
 
