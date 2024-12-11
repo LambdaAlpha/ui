@@ -1,8 +1,10 @@
-; [
-    ctx = prelude ! .,
-    ctx | main = build.import ! "../air/main/main.air",
-    ctx | extension.main = build.import ! "../air/ext/main.air",
-    ctx | set_meta ! . context {},
-    [ctx, true] | solver = build.import ! "../air/agi.air",
+do [
+    ctx = prelude ; .,
+    code = id ; do ; [
+        main = build.import ; "../air/main/main.air",
+        extension.main = build.import ; "../air/ext/main.air",
+        set_solver ; build.import ; "../air/ui.air",
+    ],
+    ctx | code,
     move ctx
 ]

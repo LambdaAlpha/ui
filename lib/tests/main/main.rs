@@ -1,27 +1,24 @@
 use std::error::Error;
 
 use airlang::{
-    initial_ctx,
-    interpret_mutable,
-    parse,
-    Ctx,
-    MutableCtx,
+    AirCell,
+    Mode,
     Text,
     Val,
+    parse,
 };
 
-pub(crate) fn ext_ctx() -> Ctx {
-    let mut ctx = initial_ctx();
-    let mut mut_ctx = MutableCtx::new(&mut ctx);
-    airlang_ext::init_ctx(mut_ctx.reborrow());
-    ctx
+pub(crate) fn ext_air_cell() -> AirCell {
+    let mut cell = AirCell::default();
+    airlang_ext::init_ctx(cell.ctx_mut());
+    cell
 }
 
 pub(crate) fn import(path: &str) -> Val {
     let src = generate_import(path);
     let val = parse(&src).expect("parse should never fail");
-    let mut ctx = ext_ctx();
-    interpret_mutable(MutableCtx::new(&mut ctx), val)
+    let mut cell = ext_air_cell();
+    cell.interpret(val)
 }
 
 fn generate_import(path: &str) -> String {
@@ -32,25 +29,25 @@ fn generate_import(path: &str) -> String {
     src.into()
 }
 
-pub(crate) fn testing_ctx() -> Ctx {
+pub(crate) fn testing_air_cell() -> AirCell {
     let ctx = import("/../tests/testing_ctx.air");
     let Val::Ctx(ctx) = ctx else { unreachable!() };
-    ctx.into()
+    AirCell::new(Mode::default(), ctx.into())
 }
 
 #[test]
 fn test_ctx_no_panic() {
-    testing_ctx();
+    testing_air_cell();
 }
 
 const MAIN_DELIMITER: &str = "=====";
 const SUB_DELIMITER: &str = "-----";
 
-pub(crate) fn test(ctx: Ctx, input: &str, file_name: &str) -> Result<(), Box<dyn Error>> {
+pub(crate) fn test(air: AirCell, input: &str, file_name: &str) -> Result<(), Box<dyn Error>> {
     if input.is_empty() {
         return Ok(());
     }
-    let backup = ctx;
+    let backup = air;
 
     let tests = input.split(MAIN_DELIMITER);
     for test in tests {
@@ -60,19 +57,19 @@ pub(crate) fn test(ctx: Ctx, input: &str, file_name: &str) -> Result<(), Box<dyn
             eprintln!("file {file_name}, case ({test}): input ({i}) parse failed\n{e}");
             e
         })?;
-        let mut ctx = backup.clone();
-        let ret = interpret_mutable(MutableCtx::new(&mut ctx), src);
+        let mut air = backup.clone();
+        let ret = air.interpret(src);
 
         let ret_expected = parse(o).map_err(|e| {
             eprintln!("file {file_name}, case ({test}): output ({o}) parse failed\n{e}");
             e
         })?;
-        let mut ret_ctx = backup.clone();
-        let ret_expected = interpret_mutable(MutableCtx::new(&mut ret_ctx), ret_expected);
+        let mut ret_cell = backup.clone();
+        let ret_expected = ret_cell.interpret(ret_expected);
         assert_eq!(
             ret, ret_expected,
             "file {file_name}, case({test}): interpreting output is not as expected! real output: {ret:#?}, \
-            current context: {ctx:#?}",
+            current context: {air:#?}",
         );
     }
     Ok(())
